@@ -1,19 +1,20 @@
 import { useEffect, useState, Fragment } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchQuestions } from './questionsSlice';
+import { fetchQuestions, addScore } from './questionsSlice';
+import { decode } from "html-entities";
 import Spinner from "../components/spinner/Spinner";
 
 import './quizPage.scss';
 
 const QuizPage = () => {
 
-    /* const [question, setQuestion] = useState();
-    const [variants, setVariants] = useState();
-    const [index, setIndex] = useState(0);
-    const [correctAnswer, setCorrectAnswer] = useState(); */
+    const [variants, setVariants] = useState([]);
+    const [oneQuestion, setOneQuestion] = useState([]);
+    const [questionIndex, setQuestionIndex] = useState(0);
+    const [answer, setAnswer] = useState('');
     const [index, setIndex] = useState('');
 
-    const {questions, questionsLoadingStatus} = useSelector(state => state.questions);
+    const {questions, questionsLoadingStatus, score} = useSelector(state => state.questions);
 
     const dispatch = useDispatch();
 
@@ -21,33 +22,57 @@ const QuizPage = () => {
         dispatch(fetchQuestions());
         // eslint-disable-next-line
     }, []);
+    
+    useEffect(() => {
+        if (questions?.length) {
+            const question = questions[questionIndex];
+            setOneQuestion(question.question);
 
-    function makeRandomArray(array) {
-        return array.sort(() => Math.random() - 0.5);
-    }
+            let answers = [...question.incorrect_answers];
 
-    const nextQuestion = () => {
-        dispatch(fetchQuestions())
+            answers.splice(getRandomInt(question.incorrect_answers.length), 0, question.correct_answer);
+            setVariants(answers);
+        }
+    }, [questions, questionIndex]);
+
+    const getRandomInt = (max) => {
+        return Math.floor(Math.random() * Math.floor(max));
+    };
+    
+    const handleClickNext = (e) => {
+        const question = questions[questionIndex];
+
+        if (questionIndex + 1 < questions.length) {
+            setQuestionIndex(questionIndex + 1);
+        } /* else {
+            history.push("/score");
+        } */
+
+        if (answer.slice(3) === question.correct_answer) {
+            dispatch(addScore(1));
+        }
+
         setIndex('');
     }
 
-    console.log(questions)
-    //console.log(question)
+    console.log(questions[questionIndex])
 
-    const renderQuestion = questions.map((item, i) => {
-        const newArr = makeRandomArray([item.correct_answer, ...item.incorrect_answers]);
+    const renderQuestion = [questions[questionIndex]].map((item, i) => {
         return (
             <Fragment key={i}>
-                <div className="quiz__question">{item.question}</div>
+                <div className="quiz__question">{decode(oneQuestion)}</div>
                 <ul>
-                    {newArr.map((item, i) => {
+                    {variants.map((item, i) => {
                         return (
                             <li 
-                                onClick={() => setIndex(i)} 
+                                onClick={(e) => {
+                                    setIndex(i);
+                                    setAnswer(e.target.textContent);
+                                }} 
                                 key={i} 
                                 className={index === i ? "quiz__variant active" : "quiz__variant"}
                             >
-                                {i + 1}) {item}
+                                {i + 1}) {decode(item)}
                             </li>
                         )
                     })}
@@ -63,8 +88,8 @@ const QuizPage = () => {
                 <div className="quiz">
                     {renderQuestion}
                     <div className='quiz__wrapper'>
-                        <div className='quiz__score'>Score 2/20</div>
-                        <button onClick={nextQuestion} className='quiz__btn'>Next</button>
+                        <div className='quiz__score'>Score {score}/{questions.length}</div>
+                        <button onClick={handleClickNext} className='quiz__btn'>Next</button>
                     </div>
                 </div>
             }
