@@ -37,3 +37,15 @@
         text-align: center;
     }
 }
+
+@media (max-width: 820px) {
+    .final {
+        padding: 50px 50px;
+        &__grac {
+            font-size: 35px;
+        }
+        &__score {
+            font-size: 15px;
+        }
+    }
+}

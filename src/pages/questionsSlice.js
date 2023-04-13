@@ -4,6 +4,7 @@ import {useHttp} from '../hooks/http.hook';
 const initialState = {
     questions: [],
     questionsLoadingStatus: 'idle',
+    questionIndex: 0,
     score: 0
 }
 
@@ -21,13 +22,18 @@ const questionsSlice = createSlice({
     initialState,
     reducers: {
         addScore: (state, action) => {state.score = state.score + action.payload},
+        changeQuestionIndex: (state, action) => {state.questionIndex = state.questionIndex + action.payload},
+        clear: (state) => {
+            state.score = 0;
+            state.questionIndex = 0;
+        },
     },
     extraReducers: (builder) => {
         builder
             .addCase(fetchQuestions.pending, state => {state.questionsLoadingStatus = 'loading'})
             .addCase(fetchQuestions.fulfilled, (state, action) => {
-                state.questions = action.payload;
                 state.questionsLoadingStatus = 'idle';
+                state.questions = action.payload;
             })
             .addCase(fetchQuestions.rejected, state => {
                 state.questionsLoadingStatus = 'error';
@@ -41,6 +47,8 @@ const {actions, reducer} = questionsSlice;
 export default reducer;
 
 export const {
+    clear,
+    changeQuestionIndex,
     addScore,
     questionsFetching,
     questionsFetched,

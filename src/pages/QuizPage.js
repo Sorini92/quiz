@@ -1,6 +1,6 @@
 import { useEffect, useState, Fragment } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchQuestions, addScore } from './questionsSlice';
+import { fetchQuestions, addScore, changeQuestionIndex } from './questionsSlice';
 import { useNavigate } from "react-router-dom";
 import { decode } from "html-entities";
 import Spinner from "../components/spinner/Spinner";
@@ -11,18 +11,20 @@ const QuizPage = () => {
 
     const [variants, setVariants] = useState([]);
     const [oneQuestion, setOneQuestion] = useState([]);
-    const [questionIndex, setQuestionIndex] = useState(0);
+    //const [questionIndex, setQuestionIndex] = useState(0);
     const [answer, setAnswer] = useState('');
     const [index, setIndex] = useState('');
 
-    const {questions, questionsLoadingStatus, score} = useSelector(state => state.questions);
+    const {questions, questionsLoadingStatus, score, questionIndex} = useSelector(state => state.questions);
     const {setting} = useSelector(state => state.categories);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
+    //console.log(Object.keys(setting).length)
     useEffect(() => {
-        dispatch(fetchQuestions(setting));
+        if (Object.keys(setting).length !== 0){
+            dispatch(fetchQuestions(setting));
+        } 
         // eslint-disable-next-line
     }, []);
     
@@ -47,7 +49,8 @@ const QuizPage = () => {
 
         if (answer.length > 0) {
             if (questionIndex + 1 < questions.length) {
-                setQuestionIndex(questionIndex + 1);
+                dispatch(changeQuestionIndex(1));
+                //setQuestionIndex(questionIndex + 1)
                 setAnswer('');
             } else {
                 navigate("/final")
