@@ -3,7 +3,8 @@ import {useHttp} from '../hooks/http.hook';
 
 const initialState = {
     categories: [],
-    categoriesLoadingStatus: 'idle'
+    categoriesLoadingStatus: 'idle',
+    setting: {}
 }
 
 export const fetchCategories = createAsyncThunk(
@@ -18,6 +19,9 @@ export const fetchCategories = createAsyncThunk(
 const categoriesSlice = createSlice({
     name: 'categories',
     initialState,
+    reducers: {
+        addSetting: (state, actions) => {state.setting = actions.payload}
+    },
     extraReducers: (builder) => {
         builder
             .addCase(fetchCategories.pending, state => {state.categoriesLoadingStatus = 'loading'})
@@ -37,6 +41,7 @@ const {actions, reducer} = categoriesSlice;
 export default reducer;
 
 export const {
+    addSetting,
     categoriesFetching,
     categoriesFetched,
     categoriesFetchingError

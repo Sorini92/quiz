@@ -1,6 +1,7 @@
 import { useEffect, useState, Fragment } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchQuestions, addScore } from './questionsSlice';
+import { useNavigate } from "react-router-dom";
 import { decode } from "html-entities";
 import Spinner from "../components/spinner/Spinner";
 
@@ -15,11 +16,13 @@ const QuizPage = () => {
     const [index, setIndex] = useState('');
 
     const {questions, questionsLoadingStatus, score} = useSelector(state => state.questions);
+    const {setting} = useSelector(state => state.categories);
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     useEffect(() => {
-        dispatch(fetchQuestions());
+        dispatch(fetchQuestions(setting));
         // eslint-disable-next-line
     }, []);
     
@@ -42,11 +45,14 @@ const QuizPage = () => {
     const handleClickNext = (e) => {
         const question = questions[questionIndex];
 
-        if (questionIndex + 1 < questions.length) {
-            setQuestionIndex(questionIndex + 1);
-        } /* else {
-            history.push("/score");
-        } */
+        if (answer.length > 0) {
+            if (questionIndex + 1 < questions.length) {
+                setQuestionIndex(questionIndex + 1);
+                setAnswer('');
+            } else {
+                navigate("/final")
+            }
+        }
 
         if (answer.slice(3) === question.correct_answer) {
             dispatch(addScore(1));
@@ -54,8 +60,6 @@ const QuizPage = () => {
 
         setIndex('');
     }
-
-    console.log(questions[questionIndex])
 
     const renderQuestion = [questions[questionIndex]].map((item, i) => {
         return (
@@ -86,6 +90,7 @@ const QuizPage = () => {
             {questionsLoadingStatus === "loading" ? 
                 <Spinner/> : 
                 <div className="quiz">
+                    <div className='quiz__amount'>{questionIndex + 1} question out of the {questions.length}</div>
                     {renderQuestion}
                     <div className='quiz__wrapper'>
                         <div className='quiz__score'>Score {score}/{questions.length}</div>

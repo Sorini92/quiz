@@ -4,14 +4,19 @@
     max-width: 800px;
     padding: 50px 100px;
     margin: 0 auto;
+    &__amount {
+        margin-top: 50px;
+        font-size: 50px;
+        text-align: center;
+    }
     &__question {
         display: flex;
         justify-content: center;
         align-items: center;
         text-align: center;
+        margin-top: 50px;
         width: 100%;
         min-height: 100px;
-        margin-top: 100px;
         padding: 10px;
         border: 1px solid lightblue;
         background-color: lightblue;

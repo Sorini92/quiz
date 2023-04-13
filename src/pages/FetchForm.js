@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCategories } from './categoriesSlice';
+import { useNavigate } from "react-router-dom";
 
 import './fetchForm.scss';
 
-const FetchForm = () => {
+const FetchForm = ({addSetting}) => {
 
     const {categories, categoriesLoadingStatus} = useSelector(state => state.categories);
 
@@ -12,6 +13,9 @@ const FetchForm = () => {
     const [difficulty, setDifficulty] = useState('');
     const [type, setType] = useState('');
     const [number, setNumber] = useState('');
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const difficulties = [
         { id: "easy", name: "Easy" },
@@ -24,7 +28,7 @@ const FetchForm = () => {
         { id: "boolean", name: "True/False" },
       ];
 
-    const dispatch = useDispatch();
+    
 
     useEffect(() => {
         dispatch(fetchCategories());
@@ -32,7 +36,7 @@ const FetchForm = () => {
     }, []);
 
     const handleChange = (event) => {
-        if (event.target.value <= 50 && event.target.value > 0) {
+        if (event.target.value <= 10 && event.target.value > 0) {
             setNumber(event.target.value);
         }
     };
@@ -46,7 +50,9 @@ const FetchForm = () => {
             type,
             number
         }
-        console.log(setting)
+        addSetting(setting);
+
+        navigate('/quiz');
     }
 
     const renderCategories = categories.map((item) => {
@@ -78,7 +84,7 @@ const FetchForm = () => {
                 {renderTypes}
             </select>
 
-            <label htmlFor="quantity" className='form__label'>How much questions do you want? (50 max)</label>
+            <label htmlFor="quantity" className='form__label'>How much questions do you want? (10 max)</label>
             <input 
                 required 
                 value={number} 
@@ -88,6 +94,7 @@ const FetchForm = () => {
                 name="quantity" 
                 className='form__input'/>
 
+            
             <button type='submit' className='form__submit'>Start</button>
         </form>
     )

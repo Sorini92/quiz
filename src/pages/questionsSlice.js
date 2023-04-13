@@ -9,9 +9,9 @@ const initialState = {
 
 export const fetchQuestions = createAsyncThunk(
     'questions/fetchQuestions',
-    async () => {
+    async (setting) => {
         const {request} = useHttp();
-        const data = await request("https://opentdb.com/api.php?amount=4&category=9&difficulty=easy&type=multiple");
+        const data = await request(`https://opentdb.com/api.php?amount=${setting.number}&category=${setting.category}&difficulty=${setting.difficulty}&type=${setting.type}`);
         return data.results;
     }
 );
@@ -26,8 +26,8 @@ const questionsSlice = createSlice({
         builder
             .addCase(fetchQuestions.pending, state => {state.questionsLoadingStatus = 'loading'})
             .addCase(fetchQuestions.fulfilled, (state, action) => {
-                state.questionsLoadingStatus = 'idle';
                 state.questions = action.payload;
+                state.questionsLoadingStatus = 'idle';
             })
             .addCase(fetchQuestions.rejected, state => {
                 state.questionsLoadingStatus = 'error';
