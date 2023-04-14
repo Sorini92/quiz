@@ -76,6 +76,7 @@
 @media (max-width: 695px) {
     .quiz {
         &__amount {
+            margin-top: 20px;
             font-size: 30px;
         }
         &__score {
@@ -89,10 +90,22 @@
 
 @media (max-width: 630px) {
     .quiz {
+        padding: 20px 20px;
         &__wrapper {
             flex-direction: column;
             justify-content: center;
             align-items: center;
+        }
+    }
+}
+
+@media (max-width: 400px) {
+    .quiz {
+        &__question {
+            margin-top: 20px;
+        }
+        &__score {
+            margin-top: 20px;
         }
     }
 }

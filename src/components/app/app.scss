@@ -13,3 +13,12 @@
         width: 90%;
     }
 }
+
+@media (max-width: 600px) {
+    .app {
+        margin: 70px auto;
+        padding: 45px 0;
+        min-height: 700px;
+        width: 90%;
+    }
+}

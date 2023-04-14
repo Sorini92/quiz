@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 
 const Page404 = () => {
     return (
-        <div>
+        <div className="error">
             <ErrorMessage/>
-            <p style={{'textAlign': 'center', 'fontWeight': 'bold', 'fontSize': '24px'}}>Страница не существует</p>
-            <Link style={{'display': 'block', 'textAlign': 'center', 'fontWeight': 'bold', 'fontSize': '24px', 'marginTop': '30px', 'color': 'red'}} to="/">Вернутся на главную</Link>
+            <p className="error__text">Страница не существует</p>
+            <Link className="error__link" to="/">Вернутся на главную</Link>
         </div>
     )
 }

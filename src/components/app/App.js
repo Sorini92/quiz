@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Navigate} from "react-router-dom";
 import { useDispatch } from 'react-redux';
 import {addSetting} from '../../pages/categoriesSlice';
 import FetchForm from '../../pages/FetchForm';
@@ -20,8 +20,9 @@ function App() {
 		<div className="app">
 			<Router>
 				<Routes>
+					<Route path="/quiz" element={<Navigate replace to='/' />} />
 					<Route path="/" element={<FetchForm addSetting={getSetting}/>} />
-					<Route path="/quiz" element={<QuizPage/>} />
+					<Route path="/questions" element={<QuizPage/>} />
 					<Route path="/final" element={<Final/>} />
 					<Route path='*' element={<Page404/>}/>
 				</Routes>

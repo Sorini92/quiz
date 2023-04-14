@@ -52,7 +52,7 @@ const FetchForm = ({addSetting}) => {
         }
         addSetting(setting);
 
-        navigate('/quiz');
+        navigate('/questions');
     }
 
     const renderCategories = categories.map((item) => {
