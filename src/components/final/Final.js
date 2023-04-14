@@ -18,7 +18,7 @@ const Final = () => {
 
     return (
         <div className='final'>
-            <div className='final__grac'>You finish the test!</div>
+            <div className='final__grac'>You finish the quiz!</div>
             <img src={finger} className='final__img' alt='finger'/>
             <div className='final__score'>You correctly answered {score} questions out of {questions.length}</div>
             <Link to={'/'} onClick={clearStorage} className='final__btn'>Again</Link>

@@ -1,7 +1,7 @@
 import { useEffect, useState, Fragment } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchQuestions, addScore, changeQuestionIndex } from './questionsSlice';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { decode } from "html-entities";
 import Spinner from "../components/spinner/Spinner";
 
@@ -11,7 +11,7 @@ const QuizPage = () => {
 
     const [variants, setVariants] = useState([]);
     const [oneQuestion, setOneQuestion] = useState([]);
-    //const [questionIndex, setQuestionIndex] = useState(0);
+
     const [answer, setAnswer] = useState('');
     const [index, setIndex] = useState('');
 
@@ -20,7 +20,7 @@ const QuizPage = () => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    //console.log(Object.keys(setting).length)
+
     useEffect(() => {
         if (Object.keys(setting).length !== 0){
             dispatch(fetchQuestions(setting));
@@ -50,7 +50,6 @@ const QuizPage = () => {
         if (answer.length > 0) {
             if (questionIndex + 1 < questions.length) {
                 dispatch(changeQuestionIndex(1));
-                //setQuestionIndex(questionIndex + 1)
                 setAnswer('');
             } else {
                 navigate("/final")
@@ -87,19 +86,38 @@ const QuizPage = () => {
             </Fragment>
         )
     })
+
+    const renderQuiz = () => {
+        return (
+            <div className="quiz">
+                <div className='quiz__amount'>{questionIndex + 1} question out of the {questions.length}</div>
+                {renderQuestion}
+                <div className='quiz__wrapper'>
+                    <div className='quiz__score'>Score {score}/{questions.length}</div>
+                    <button onClick={handleClickNext} className='quiz__btn'>Next</button>
+                </div>
+            </div>
+        )
+    }
+
+    const emptyQuestionsElement = () => {
+        return (
+            <div className="quiz">
+                <div className='quiz__error'>Something went wrong</div>
+                <div className='quiz__wrapper'>
+                    <Link to={'/'} className='quiz__errorBtn'>Try again</Link>
+                </div>
+            </div>
+        )
+    }
+
+    const onEmptyQuestions = questions.length !== 0 ? renderQuiz() : emptyQuestionsElement();
     
     return (
         <>
             {questionsLoadingStatus === "loading" ? 
                 <Spinner/> : 
-                <div className="quiz">
-                    <div className='quiz__amount'>{questionIndex + 1} question out of the {questions.length}</div>
-                    {renderQuestion}
-                    <div className='quiz__wrapper'>
-                        <div className='quiz__score'>Score {score}/{questions.length}</div>
-                        <button onClick={handleClickNext} className='quiz__btn'>Next</button>
-                    </div>
-                </div>
+                onEmptyQuestions
             }
         </>
     )
