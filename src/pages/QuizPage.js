@@ -1,6 +1,6 @@
 import { useEffect, useState, Fragment } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchQuestions, addScore, changeQuestionIndex } from './questionsSlice';
+import { fetchQuestions, addScore, changeQuestionIndex, clear } from './questionsSlice';
 import { useNavigate, Link } from "react-router-dom";
 import { decode } from "html-entities";
 import Spinner from "../components/spinner/Spinner";
@@ -63,6 +63,10 @@ const QuizPage = () => {
         setIndex('');
     }
 
+    const clearStorage = () => {
+        dispatch(clear());
+    }
+
     const renderQuestion = [questions[questionIndex]].map((item, i) => {
         return (
             <Fragment key={i}>
@@ -93,6 +97,7 @@ const QuizPage = () => {
                 <div className='quiz__amount'>{questionIndex + 1} question out of the {questions.length}</div>
                 {renderQuestion}
                 <div className='quiz__wrapper'>
+                    <Link to={'/'} onClick={clearStorage} className='quiz__homebtn'>Home</Link>
                     <div className='quiz__score'>Score {score}/{questions.length}</div>
                     <button onClick={handleClickNext} className='quiz__btn'>Next</button>
                 </div>

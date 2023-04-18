@@ -37,12 +37,16 @@
         justify-content: space-between;
     }
     &__score {
-        margin-top: 30px;
-        font-size: 50px;
+        margin-top: 35px;
+        font-size: 40px;
     }
-    &__btn {
+    &__btn, &__homebtn {
+        text-decoration: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         margin-top: 30px;
-        width: 200px;
+        width: 150px;
         height: 50px;
         border-radius: 5px;
         border: none;
@@ -89,9 +93,6 @@
         &__score {
             font-size: 40px;
         }
-        &__btn {
-            height: 40px;
-        }
         &__error {
             font-size: 33px;
             margin-top: 200px;
@@ -108,9 +109,6 @@
         &__score {
             font-size: 30px;
         }
-        &__btn {
-            height: 30px;
-        }
     }
 }
 
@@ -121,6 +119,12 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+        }
+        &__btn, &__homebtn  {
+            width: 100%;
+        }
+        &__homebtn {
+            order: 3;
         }
     }
 }
@@ -134,5 +138,6 @@
         &__score {
             margin-top: 20px;
         }
+
     }
 }
