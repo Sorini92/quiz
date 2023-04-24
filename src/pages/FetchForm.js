@@ -12,7 +12,7 @@ const FetchForm = ({addSetting}) => {
     const [category, setCategory] = useState('');
     const [difficulty, setDifficulty] = useState('');
     const [type, setType] = useState('');
-    const [number, setNumber] = useState('');
+    const [number, setNumber] = useState(1);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -36,23 +36,23 @@ const FetchForm = ({addSetting}) => {
     }, []);
 
     const handleChange = (event) => {
-        if (event.target.value <= 10 && event.target.value > 0) {
-            setNumber(event.target.value);
-        }
+        setNumber(event.target.value);
     };
 
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        const setting = {
-            category,
-            difficulty,
-            type,
-            number
+        if (number > 0 && number <= 20) {
+            const setting = {
+                category,
+                difficulty,
+                type,
+                number
+            }
+            addSetting(setting);
+    
+            navigate('/questions');
         }
-        addSetting(setting);
-
-        navigate('/questions');
     }
 
     const renderCategories = categories.map((item) => {
@@ -93,7 +93,7 @@ const FetchForm = ({addSetting}) => {
                 id='quantity' 
                 name="quantity" 
                 className='form__input'/>
-
+            {number < 1 || number > 20 ? <div className='form__input-err'>Введите число от 1 до 20</div> : null}
             
             <button type='submit' className='form__submit'>Start</button>
         </form>
